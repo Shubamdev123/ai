@@ -1,19 +1,21 @@
-def bfs(g,s):
-    v=[]
-    q=[s]
-    while q:
-        n=q.pop(0)
-        if n not in v:
-            v.append(n)
-            q.extend(g[n])
-    return v
+def bfs(graph, start):
+    visited = []           # List to keep track of visited nodes
+    queue = [start]        # Use a queue initialized with the start node
+    
+    while queue:
+        node = queue.pop(0)  # Take the first node from the queue
+        if node not in visited:
+            visited.append(node)  # Mark the node as visited
+            queue.extend(graph[node])  # Add unvisited neighbors to the queue
+    
+    return visited
 
-n=int(input())
-g={}
-for i in range(n):
-    ne=list(map(int,input("enter the numbers of each vertices").split()))
-    g[i]=ne
-
-s=int(input("enter the starting vertex"))
-res=bfs(g,s)
-print("bfs is ",res)
+# Example usage
+graph = {
+    0: [1],
+    1: [2, 3],
+    2: [0, 4],
+    3: [4],
+    4: []
+}
+print("BFS starting from vertex 0:", bfs(graph, 0))
