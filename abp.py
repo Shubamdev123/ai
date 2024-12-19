@@ -1,30 +1,31 @@
 import math
-def ab(cur,ni,mt,s,t,a,b):
-    if cur==t:
-        return s[ni]
-    if mt:
-        max1=-math.inf
-        l=ab(cur+1,ni*2,False,s,t,a,b)
-        max1=max(max1,l)
-        a=max(a,max1)
-        if b<=a:
-            return max1
-        r=ab(cur+1,ni*2+1,False,s,t,a,b)
-        max1=max(max1,r)
-        return max1
-    else:
-        min1=math.inf
-        l=ab(cur+1,ni*2,True,s,t,a,b)
-        min1=min(min1,l)
-        b=min(b,min1)
-        if b<=a:
-            return min1
-        r=ab(cur+1,ni*2+1,True,s,t,a,b)
-        min1=min(min1,r)
-        return min1
 
-n=int(input("Enter value: "))
-s=list(map(int,input().split()))
-t=math.log(len(s),2)
-print("optimal value is:",end="")
-print(ab(0,0,True,s,t,-math.inf,math.inf))
+def alpha_beta(depth, index, is_max, scores, max_depth, alpha=float('-inf'), beta=float('inf')):
+    if depth == max_depth:  # Base case: if at the target depth, return the leaf node score
+        return scores[index]
+
+    if is_max:  # Maximizer's turn
+        best = float('-inf')  # Initialize best value as -infinity
+        for i in range(2):  # Two children (binary tree)
+            value = alpha_beta(depth + 1, index * 2 + i, False, scores, max_depth, alpha, beta)
+            best = max(best, value)  # Update the best value
+            alpha = max(alpha, value)  # Update alpha
+            if beta <= alpha:  # Prune if alpha is greater than or equal to beta
+                break
+        return best
+    else:  # Minimizer's turn
+        best = float('inf')  # Initialize best value as +infinity
+        for i in range(2):  # Two children (binary tree)
+            value = alpha_beta(depth + 1, index * 2 + i, True, scores, max_depth, alpha, beta)
+            best = min(best, value)  # Update the best value
+            beta = min(beta, value)  # Update beta
+            if beta <= alpha:  # Prune if alpha is greater than or equal to beta
+                break
+        return best
+
+# Example usage
+scores = [3, 5, 2, 9, 12, 5, 23, 23]  # Leaf nodes of the tree
+max_depth = int(math.log2(len(scores)))  # Depth of the tree
+
+optimal_value = alpha_beta(0, 0, True, scores, max_depth)  # Call the alpha-beta pruning function
+print("The optimal value is:", optimal_value)
