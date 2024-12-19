@@ -1,23 +1,27 @@
-def waterj(j1,j2,target):
-    jug1,jug2=0,0
-    s=[(jug1,jug2)]
-    while(jug1!=target and jug2!=target):
-        if jug1==0:
-            jug1=j1
-        elif jug2==j2:
-            jug2=0
-        else:
-            transfer=min((jug1,j2-jug2))
-            jug1-=transfer
-            jug2+=transfer
-        s.append((jug1,jug2))
-        if(jug1==target or jug2==target):
-            break
-    return s
+def water_jug_problem(jug1_capacity, jug2_capacity, target):
+    jug1, jug2 = 0, 0  # Both jugs start empty
+    steps = [(jug1, jug2)]  # Track steps for solution
 
-j1=int(input("enter the capacity of jug1: "))
-j2=int(input("enter the capacity of the jug2: "))
-target=int(input("enter the target: "))
-s=waterj(j1,j2,target)
-for jug1,jug2 in s:
-    print(f"Jug1 :{jug1}  Jug2: {jug2}")
+    while jug1 != target and jug2 != target:
+        if jug1 == 0:  # If Jug1 is empty, fill it
+            jug1 = jug1_capacity
+        elif jug2 == jug2_capacity:  # If Jug2 is full, empty it
+            jug2 = 0
+        else:  # Pour water from Jug1 into Jug2
+            transfer = min(jug1, jug2_capacity - jug2)
+            jug1 -= transfer
+            jug2 += transfer
+        
+        steps.append((jug1, jug2))  # Record the state after each step
+
+    return steps  # Return the sequence of steps
+
+# Example Usage
+jug1_capacity = int(input("Enter capacity of Jug1: "))  # Input Jug1 capacity
+jug2_capacity = int(input("Enter capacity of Jug2: "))  # Input Jug2 capacity
+target = int(input("Enter target amount: "))  # Input target amount
+
+# Find and display the steps
+steps = water_jug_problem(jug1_capacity, jug2_capacity, target)
+for jug1, jug2 in steps:  # Print each step in a readable format
+    print(f"Jug1: {jug1}, Jug2: {jug2}")
